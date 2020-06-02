@@ -84,7 +84,7 @@ class BookForm extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.bookSubmit}>
+      <form id='new-book' onSubmit={this.bookSubmit}>
         <label>
           Title: 
           <input
