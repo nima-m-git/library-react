@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import './index.css';
+import './index.css';
 
 const generateID = (function () {
   let id = 0;
@@ -22,8 +22,10 @@ const BookTable = (props) => {
           <td>{pages}</td>
           <td>{read}</td>
           <td>
-            <button onClick={props.readToggle}>read?</button>
-            <button onClick={props.removeBook}>remove?</button>
+            <button onClick={() => props.readToggle(id)}>read?</button>
+          </td>
+          <td>
+            <button onClick={() => props.removeBook(id)}>remove?</button>
           </td>
         </tr>
       )
@@ -56,7 +58,7 @@ class BookForm extends React.Component {
       title: '',
       author: '',
       pages: '',
-      read: false,
+      read: 'no',
     };
     this.state = {...this.initialState};
     this.handleChange = this.handleChange.bind(this);
@@ -111,10 +113,14 @@ class BookForm extends React.Component {
         </label>
         <label>
           Read: 
-          <input
+          <select
             name='read'
             type='checkbox'
-            onChange={this.handleChange} />
+            value={this.state.read}
+            onChange={this.handleChange} >
+            <option value='no'>No</option>
+            <option value='yes'>Yes</option>
+          </select>
         </label>
         <input 
           type='submit'
@@ -142,16 +148,18 @@ class Library extends React.Component {
   }
 
   removeBook(id) {
-    const books = this.state;
-    const updatedBooks = books.books.filter((book) => book.id !== id);
+    const updatedBooks = this.state.books.filter((book) => book.id !== id);
     this.setState({books: updatedBooks})
   }
 
   readToggle(id) {
-    const books = this.state;
-    const bookToToggle = books.book.filter((book) => book.id === id);
-    bookToToggle.read = (bookToToggle.read)? false : true;
-    this.addBook(bookToToggle);
+    const books = [...this.state.books];
+    const index = books.findIndex(book => book.id === id);
+    books[index].read = (books[index].read === 'yes')? 'no' : 'yes';
+
+    this.setState({
+      books,
+    })
   }
 
   render() {
