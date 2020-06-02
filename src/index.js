@@ -12,6 +12,24 @@ const generateID = (function () {
 
 
 const BookTable = (props) => {
+  const renderTableData = () => {
+    return props.books.map((book) => {
+      const {title, author, pages, read, id,} = book;
+      return (
+        <tr key={id}>
+          <td>{title}</td>
+          <td>{author}</td>
+          <td>{pages}</td>
+          <td>{read}</td>
+          <td>
+            <button onClick={props.readToggle}>read?</button>
+            <button onClick={props.removeBook}>remove?</button>
+          </td>
+        </tr>
+      )
+    })
+
+  }
   return (
     <table>
       <thead>
@@ -24,6 +42,9 @@ const BookTable = (props) => {
           <th>Remove?</th>
         </tr>
       </thead>
+      <tbody>
+        {renderTableData()}
+      </tbody>
     </table>
   );
 }
@@ -138,7 +159,7 @@ class Library extends React.Component {
       <div>
         <h1>My Library</h1>
         <BookForm addBook={this.addBook} />
-        <BookTable />
+        <BookTable books={this.state.books} removeBook={this.removeBook} readToggle={this.readToggle}/>
       </div>
     );
   }
