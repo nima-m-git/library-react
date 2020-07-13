@@ -1,20 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import {generateID} from './generateID';
 
-const generateID = (function () {
-  let id = 0;
-  function newID() {
-      return id++;
-  }
-  return {newID}
-})();
+
+/* TODO:
+- media query, fix element crunch
+- add localstorage / backend db
+- order-by choice for table
+*/
 
 
 const BookTable = (props) => {
   const renderTableData = () => {
     return props.books.map((book) => {
       const {title, author, pages, read, id,} = book;
+
+      console.log({id, title})
+
       return (
         <tr key={id}>
           <td>{title}</td>
@@ -60,7 +63,9 @@ class BookForm extends React.Component {
       pages: '',
       read: 'no',
     };
-    this.state = {...this.initialState};
+    this.state = {
+      ...this.initialState,
+    };
     this.handleChange = this.handleChange.bind(this);
     this.resetForm = this.resetForm.bind(this);
     this.bookSubmit = this.bookSubmit.bind(this);
@@ -72,8 +77,12 @@ class BookForm extends React.Component {
     })
   }
 
+
   bookSubmit(e) {
     e.preventDefault();
+    this.setState({
+      id: (new Date()).getTime(),
+    })
     this.props.addBook(this.state);
     this.resetForm();
   }
@@ -134,40 +143,66 @@ class BookForm extends React.Component {
 class Library extends React.Component {
   constructor(props) {
     super(props);
+    this.getBooks = () => Object.values(localStorage).map(book => JSON.parse(book));
     this.state = {
-      books: [],
+      books: this.getBooks(),
     }
+    this.updateStorage = this.updateStorage.bind(this);
     this.addBook = this.addBook.bind(this);
     this.removeBook = this.removeBook.bind(this);
     this.readToggle = this.readToggle.bind(this);
   }
 
-  addBook(bookAdd) {
-    bookAdd.id = generateID.newID();
-    this.setState({books: [...this.state.books, bookAdd]})
-  }
-
-  removeBook(id) {
-    const updatedBooks = this.state.books.filter((book) => book.id !== id);
-    this.setState({books: updatedBooks})
-  }
-
-  readToggle(id) {
-    const books = [...this.state.books];
-    const index = books.findIndex(book => book.id === id);
-    books[index].read = (books[index].read === 'yes')? 'no' : 'yes';
-
+  updateUI() {
     this.setState({
-      books,
+      books: this.getBooks()
     })
   }
 
+  updateStorage(book){
+    localStorage.setItem(book.id, JSON.stringify(book));
+    this.updateUI()
+  }
+
+  addBook(bookToAdd) {
+    this.updateStorage(bookToAdd);
+  }
+
+  removeBook(id) {
+    localStorage.removeItem(id);
+    // const updatedBooks = this.state.books.filter((book) => book.id !== id);
+    // this.setState({books: updatedBooks})
+    this.updateUI()
+  }
+
+  readToggle(id) {
+    const book = JSON.parse(localStorage.getItem(id));
+    book.read = (book.read === "yes") ? "no" : "yes";
+    this.updateStorage(book)
+
+
+    // const books = [...this.state.books];
+    // const index = books.findIndex(book => book.id === id);
+    // books[index].read = (books[index].read === 'yes')? 'no' : 'yes';
+
+    // this.setState({
+    //   books,
+    // })
+  }
+
+  getLibrary = () => Object.values(localStorage).map(book => JSON.parse(book));
+
+
   render() {
+    const sortedBooks = this.state.books.sort((a, b) => (a.id > b.id)? 1 : -1);
     return (
       <div>
-        <h1>My Library</h1>
         <BookForm addBook={this.addBook} />
-        <BookTable books={this.state.books} removeBook={this.removeBook} readToggle={this.readToggle}/>
+        <BookTable 
+          books={sortedBooks} 
+          removeBook={this.removeBook} 
+          readToggle={this.readToggle}
+        />
       </div>
     );
   }
@@ -176,6 +211,9 @@ class Library extends React.Component {
 
 ReactDOM.render(
   <React.StrictMode>
+    <div className='header'>
+      <h1>My Library</h1>
+    </div>
     <Library />
   </React.StrictMode>,
   document.getElementById('root')
