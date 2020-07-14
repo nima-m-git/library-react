@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import {generateID} from './generateID';
 
 
 /* TODO:
@@ -14,9 +13,7 @@ import {generateID} from './generateID';
 const BookTable = (props) => {
   const renderTableData = () => {
     return props.books.map((book) => {
-      const {title, author, pages, read, id,} = book;
-
-      console.log({id, title})
+      const { title, author, pages, read, id, } = book;
 
       return (
         <tr key={id}>
@@ -131,9 +128,7 @@ class BookForm extends React.Component {
             <option value='yes'>Yes</option>
           </select>
         </label>
-        <input 
-          type='submit'
-          value='Add Book' />
+        <button type='submit'>Add Book</button>
       </form>
     );
   }
@@ -153,6 +148,7 @@ class Library extends React.Component {
     this.readToggle = this.readToggle.bind(this);
   }
 
+  // TODO: find alternative to rerender components on localstorage update
   updateUI() {
     this.setState({
       books: this.getBooks()
@@ -170,8 +166,6 @@ class Library extends React.Component {
 
   removeBook(id) {
     localStorage.removeItem(id);
-    // const updatedBooks = this.state.books.filter((book) => book.id !== id);
-    // this.setState({books: updatedBooks})
     this.updateUI()
   }
 
@@ -179,31 +173,25 @@ class Library extends React.Component {
     const book = JSON.parse(localStorage.getItem(id));
     book.read = (book.read === "yes") ? "no" : "yes";
     this.updateStorage(book)
-
-
-    // const books = [...this.state.books];
-    // const index = books.findIndex(book => book.id === id);
-    // books[index].read = (books[index].read === 'yes')? 'no' : 'yes';
-
-    // this.setState({
-    //   books,
-    // })
   }
-
-  getLibrary = () => Object.values(localStorage).map(book => JSON.parse(book));
 
 
   render() {
     const sortedBooks = this.state.books.sort((a, b) => (a.id > b.id)? 1 : -1);
     return (
       <div>
-        <BookForm addBook={this.addBook} />
-        <BookTable 
-          books={sortedBooks} 
-          removeBook={this.removeBook} 
-          readToggle={this.readToggle}
-        />
+        <section className='form'>
+          <BookForm addBook={this.addBook} />
+        </section>
+        <section className='table'> 
+          <BookTable 
+            books={sortedBooks} 
+            removeBook={this.removeBook} 
+            readToggle={this.readToggle}
+          />
+        </section>
       </div>
+
     );
   }
 }

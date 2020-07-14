@@ -14,10 +14,15 @@
   src: url('static/magnificent_2/Magnificent\ Personal\ Use.ttf');
 }
 
-#root {
+body {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-content: center;
+  box-sizing: border-box;
+}
+
+.header {
+  text-align: center;
 }
 
 h1 {
@@ -38,38 +43,46 @@ th {
   font-size: 20px;
 }
 
-#new-book {
-  position: fixed;
-  margin: auto;
+.form {
+  position: relative;
+  min-width: 650px;
+  max-width: 650px;
   left: 50%;
-  top: 15vw;
+  top: 10vw;
   transform: translate(-50%);
   font-size: 22px;
-  width: 70vw;
-  box-shadow: 0 0 40px 35px rgba(75, 42, 21, 0.808);
-  border-radius: 25%;
-  padding: 2%;
+  border-radius: 25px;
+}
+
+#new-book {
+  display: flex;
+  flex-wrap: wrap;
+  /* max-height: 100px; */
+  flex: 1 1 1;
+
+  box-shadow: 0 0 20px 15px rgba(75, 42, 21, 0.808);
+  border-radius: 25px;
+  padding: 10px 10px;
   font-family: 'midieval';
   background: rgba(201, 141, 98, 0.719);
-  display: block;
 }
 
-#new-book label {
-  background: rgba(201, 141, 98, 0); 
+label {
+  background: rgba(204, 159, 127, 0);
+  margin: 5px 15px; 
 }
 
-select {
-  background: rgba(201, 141, 98, 0); 
+select[type='checkbox'], option {
+  background-color: rgba(209, 168, 114, 0.747);
 }
 
 table {
   display: block;
-  position: fixed;
-  margin: auto;
+  position: relative;
   left: 50%;
-  top: 28vw; 
+  top: 15vw; 
   transform: translate(-50%);
-  width: auto;
+  width: 380px;
   max-height: 50vw;
   overflow: auto;
   table-layout: auto;
@@ -81,6 +94,12 @@ button {
   font-size: 18px;
   font-family: Apple Chancery, cursive;
   background: rgba(206, 160, 128, 0.856);
+}
+
+button[type='submit'] {
+  border-radius: 15px;
+  background-color: rgba(209, 168, 114, 0.774);
+  border: 2px solid grey;
 }
 
 button:hover {
@@ -100,4 +119,5 @@ input {
   font-size: 16px;
   font-family: 'Courier New', Courier, monospace;
   font-weight: bold;
+  border-radius: 10px;
 }
