@@ -45,8 +45,8 @@ th {
 
 .form {
   position: relative;
-  min-width: 650px;
-  max-width: 650px;
+  /* min-width: 650px; */
+  max-width: 90vw;
   left: 50%;
   top: 10vw;
   transform: translate(-50%);
@@ -54,11 +54,10 @@ th {
   border-radius: 25px;
 }
 
+/* Flex Form */
 #new-book {
   display: flex;
   flex-wrap: wrap;
-  /* max-height: 100px; */
-  flex: 1 1 1;
 
   box-shadow: 0 0 20px 15px rgba(75, 42, 21, 0.808);
   border-radius: 25px;
@@ -67,9 +66,16 @@ th {
   background: rgba(201, 141, 98, 0.719);
 }
 
+/* Flex Items */
 label {
+  display: flex;
+  flex: 5 5 25%;
   background: rgba(204, 159, 127, 0);
   margin: 5px 15px; 
+}
+
+label[name=pages], label[name=read], button[type=submit] {
+  flex: 1 1 10%;
 }
 
 select[type='checkbox'], option {
