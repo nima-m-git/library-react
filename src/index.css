@@ -46,7 +46,7 @@ th {
 .form {
   position: relative;
   /* min-width: 650px; */
-  max-width: 90vw;
+  /* max-width: 90vw; */
   left: 50%;
   top: 10vw;
   transform: translate(-50%);
@@ -69,13 +69,17 @@ th {
 /* Flex Items */
 label {
   display: flex;
-  flex: 5 5 25%;
+  /* flex: 5; */
   background: rgba(204, 159, 127, 0);
   margin: 5px 15px; 
 }
 
-label[name=pages], label[name=read], button[type=submit] {
-  flex: 1 1 10%;
+label[name=pages] {
+  flex-basis: 100px;
+}
+
+label[name=read], button[type=submit] {
+  flex: 1;
 }
 
 select[type='checkbox'], option {
@@ -88,18 +92,19 @@ table {
   left: 50%;
   top: 15vw; 
   transform: translate(-50%);
-  width: 380px;
+  width: 374px;
   max-height: 50vw;
   overflow: auto;
   table-layout: auto;
   font-size: 18px;
-  box-shadow: 0 0 40px 35px rgba(75, 42, 21, 0.808);
+  box-shadow: 0 0 40px 35px rgba(160, 103, 67, 0.514);
 }
 
 button {
   font-size: 18px;
   font-family: Apple Chancery, cursive;
   background: rgba(206, 160, 128, 0.856);
+  border: none;
 }
 
 button[type='submit'] {
